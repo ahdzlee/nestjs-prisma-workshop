@@ -12,8 +12,10 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiOkResponse,
   ApiTags,
+  getSchemaPath,
 } from '@nestjs/swagger';
 
 import { ProductsService } from './products.service';
@@ -21,9 +23,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductEntity } from './entities/product.entity';
 import { ConnectionArgsDto } from '../page/connection-args.dto';
+import { PageDto } from '../page/page.dto';
 
 @Controller('products')
 @ApiTags('Products')
+@ApiExtraModels(PageDto) // 👈 required to generate types for Page
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -52,6 +56,28 @@ export class ProductsController {
   }
 
   @Get('page')
+  @ApiOkResponse({
+    schema: {
+      allOf: [
+        { $ref: getSchemaPath(PageDto) },
+        {
+          properties: {
+            edges: {
+              type: 'array',
+              items: {
+                type: 'object',
+                required: ['cursor', 'node'],
+                properties: {
+                  cursor: { type: 'string' },
+                  node: { type: 'object', $ref: getSchemaPath(ProductEntity) },
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
+  })
   findPage(@Query() connectionArgs: ConnectionArgsDto) {
     return this.productsService.findPage(connectionArgs);
   }
