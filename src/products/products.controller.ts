@@ -7,7 +7,13 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -21,6 +27,8 @@ export class ProductsController {
 
   @Post()
   @ApiCreatedResponse({ type: ProductEntity })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
+  @ApiConflictResponse({ description: 'Unique constraint failed on field' })
   async create(@Body() createProductDto: CreateProductDto) {
     return new ProductEntity(
       await this.productsService.create(createProductDto),
@@ -49,6 +57,8 @@ export class ProductsController {
 
   @Patch(':id')
   @ApiCreatedResponse({ type: ProductEntity })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
+  @ApiConflictResponse({ description: 'Unique constraint failed on field' })
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
