@@ -49,6 +49,11 @@ export class ProductsController {
     return products.map((product) => new ProductEntity(product));
   }
 
+  @Get('page')
+  async findPage() {
+    return this.productsService.findPage();
+  }
+
   @Get(':id')
   @ApiOkResponse({ type: ProductEntity })
   async findOne(@Param('id') id: string) {
