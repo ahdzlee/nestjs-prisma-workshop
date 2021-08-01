@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -19,6 +20,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductEntity } from './entities/product.entity';
+import { ConnectionArgsDto } from '../page/connection-args.dto';
 
 @Controller('products')
 @ApiTags('Products')
@@ -50,8 +52,8 @@ export class ProductsController {
   }
 
   @Get('page')
-  async findPage() {
-    return this.productsService.findPage();
+  findPage(@Query() connectionArgs: ConnectionArgsDto) {
+    return this.productsService.findPage(connectionArgs);
   }
 
   @Get(':id')
