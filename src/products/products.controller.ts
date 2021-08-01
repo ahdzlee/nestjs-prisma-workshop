@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiExtraModels,
@@ -35,6 +36,7 @@ export class ProductsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ProductEntity })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @ApiConflictResponse({ description: 'Unique constraint failed on field' })
@@ -53,6 +55,7 @@ export class ProductsController {
 
   @Get('drafts')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: [ProductEntity] })
   async findDrafts() {
     const products = await this.productsService.findDrafts();
@@ -73,6 +76,7 @@ export class ProductsController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ProductEntity })
   @ApiBadRequestResponse({ description: 'Bad Request' })
   @ApiConflictResponse({ description: 'Unique constraint failed on field' })
@@ -87,6 +91,7 @@ export class ProductsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ProductEntity })
   async remove(@Param('id') id: string) {
     return new ProductEntity(await this.productsService.remove(id));
