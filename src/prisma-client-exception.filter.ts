@@ -12,8 +12,8 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
     // Refer to Prisma API reference for the error codes
     // https://www.prisma.io/docs/reference/api-reference/error-reference#prisma-client-query-engine
     switch (exception.code) {
+      // Unique constraint failed on a certain field
       case 'P2002':
-        // return conflict response
         const status = HttpStatus.CONFLICT;
         const message = exception.message.replace(/\n/g, '');
         response.status(status).json({
