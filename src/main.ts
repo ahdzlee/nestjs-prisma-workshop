@@ -10,7 +10,14 @@ async function bootstrap() {
 
   // bind ValidationPipe to the entire application to protect all endpoints
   // from receiving invalid data
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, // 👈 automatically transform payloads
+      transformOptions: {
+        enableImplicitConversion: true, // 👈  transform based on TS type
+      },
+    }),
+  );
 
   // apply transform to all responses
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

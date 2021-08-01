@@ -1,9 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class ConnectionArgsDto {
+  @IsOptional()
+  @IsNumber()
   @ApiProperty({ required: false })
   first?: number;
 
+  @IsOptional()
+  @IsNumber()
   @ApiProperty({ required: false })
   last?: number;
 
