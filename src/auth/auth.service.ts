@@ -47,4 +47,8 @@ export class AuthService {
       accessToken: this.jwtService.sign({ userId: user.id }),
     };
   }
+
+  async validateUser(userId: string) {
+    return this.prisma.user.findUnique({ where: { id: userId } });
+  }
 }

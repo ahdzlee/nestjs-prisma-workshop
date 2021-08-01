@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './jwt.strategy';
 
 // don't expose your keys, move them into .env file or to some secret vault
 // read values using the @nestjs/config package
@@ -18,6 +19,6 @@ export const jwtSecret = 'prismaDay2021';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy], // 👈 expose JwtStrategy
 })
 export class AuthModule {}
