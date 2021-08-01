@@ -11,4 +11,8 @@ export class PageDto<Record> {
 
   @ApiProperty()
   totalCount: number;
+
+  constructor(partial: Partial<PageDto<Record>>) {
+    Object.assign(this, partial);
+  }
 }

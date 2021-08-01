@@ -3,9 +3,11 @@ import { findManyCursorConnection } from '@devoxa/prisma-relay-cursor-connection
 import { Prisma } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { ProductEntity } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ConnectionArgsDto } from '../page/connection-args.dto';
+import { PageDto } from '../page/page.dto';
 
 @Injectable()
 export class ProductsService {
@@ -26,7 +28,7 @@ export class ProductsService {
   async findPage(connectionArgs: ConnectionArgsDto) {
     const where: Prisma.ProductWhereInput = { published: true };
 
-    return await findManyCursorConnection(
+    const productPage = await findManyCursorConnection(
       // 👇 args contain take, skip and cursor
       (args) =>
         this.prisma.product.findMany({
@@ -38,7 +40,14 @@ export class ProductsService {
           where, // 👈 apply paging arguments
         }),
       connectionArgs, // 👈 use connection arguments
+      {
+        recordToEdge: (record) => ({
+          node: new ProductEntity(record), // 👈 instance to transform price
+        }),
+      },
     );
+
+    return new PageDto<ProductEntity>(productPage); // 👈 instance as this object is returned
   }
 
   findOne(id: string) {
