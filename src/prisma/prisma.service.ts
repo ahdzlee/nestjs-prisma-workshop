@@ -5,6 +5,6 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaService extends PrismaClient {
   constructor() {
     // pass PrismaClientOptions eg., logging levels or error formatting
-    super({ log: ['info'] });
+    super({ log: ['query', 'info', 'warn', 'error'] });
   }
 }
